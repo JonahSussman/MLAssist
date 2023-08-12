@@ -331,13 +331,71 @@ agent = OpenAIFunctionsAgent(llm=llm, tools=tools, prompt=prompt)
 # agent_executor = AgentExecutor(agent=agent, tools=tools, memory=memory, verbose=True)
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
-inp = """
-- Trying to migrate to EKS EKS
-- Session id is changing with each page load
-- Hazelcast not configured properly to work with Kubernetes?
-- Cookie management is ok
+# inp = """
+# - Trying to migrate to EKS EKS
+# - Session id is changing with each page load
+# - Hazelcast not configured properly to work with Kubernetes?
+# - Cookie management is ok
 
-Please analyze the repository and provide a specific source code modification or configuration change to try. You may need to examine file contents and search documentation.
+# Please analyze the repository and provide a specific source code modification or configuration change to try. You may need to examine file contents and search documentation.
+# """.strip()
+
+# inp = """
+# When migrating to EKS, the session id is changing with each page load. I believe this has something to do with the hazelcast implementation not being configured properly to work with Kubernetes. Hazelcast has a `getKubernetesConfig` method which may be helpful. The cookie management is ok. Please analyze the repository and provide a specific source code modification or configuration change to try.""".strip()
+
+inp = """
+When migrating to EKS, the session id is changing with each page load. I believe this has something to do with the hazelcast implementation not being configured properly to work with Kubernetes. Hazelcast has `KubernetesConfig` which may be helpful. The issue persists regardless of cookies.
+
+
+Package com.hazelcast.config
+Class KubernetesConfig
+
+    java.lang.Object
+        com.hazelcast.config.AliasedDiscoveryConfig<KubernetesConfig>
+            com.hazelcast.config.KubernetesConfig 
+
+    All Implemented Interfaces:
+        DataSerializable, IdentifiedDataSerializable
+
+    public class KubernetesConfig
+    extends AliasedDiscoveryConfig<KubernetesConfig>
+
+    Configuration for the Kubernetes Discovery Strategy.
+
+        Constructor Summary
+        Constructors Constructor 	Description
+        KubernetesConfig() 	 
+        KubernetesConfig​(KubernetesConfig kubernetesConfig) 	 
+        Method Summary
+        All MethodsInstance MethodsConcrete Methods Modifier and Type 	Method 	Description
+        int 	getClassId() 	
+        Returns type identifier for this class.
+            Methods inherited from class com.hazelcast.config.AliasedDiscoveryConfig
+            equals, getFactoryId, getProperties, getProperty, getTag, hashCode, isEnabled, isUsePublicIp, readData, setEnabled, setProperty, setUsePublicIp, toString, writeData
+            Methods inherited from class java.lang.Object
+            clone, finalize, getClass, notify, notifyAll, wait, wait, wait
+
+        Constructor Detail
+            KubernetesConfig
+
+            public KubernetesConfig()
+
+            KubernetesConfig
+
+            public KubernetesConfig​(KubernetesConfig kubernetesConfig)
+
+        Method Detail
+            getClassId
+
+            public int getClassId()
+
+            Description copied from interface: IdentifiedDataSerializable
+            Returns type identifier for this class. It should be unique per DataSerializableFactory.
+
+            Returns:
+                type ID
+
+Please analyze the repository and provide a specific source code modification or configuration change to try.
 """.strip()
 
 print(inp)
